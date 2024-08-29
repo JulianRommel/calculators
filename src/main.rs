@@ -1,10 +1,7 @@
 use std::io;
 
 fn main() {
-    let possible_operations = ["*", "+", "-"];
-
     let mut input_1 = String::new();
-    // let mut input_2 = String::new();
 
     println!("Enter equation");
 
@@ -12,52 +9,48 @@ fn main() {
         .read_line(&mut input_1)
         .expect("Failed to read number!");
 
-    // let number_1: i32 = input_1
-    // .trim()
-    // .parse::<i32>()
-    // .expect("Not a valid Number 1!");
-    for operation in possible_operations {
-        println!("try {operation}");
-        let splitted: Vec<&str> = input_1.trim().split(operation).collect();
-        // println!("{splitted}");
-        // let splitted_option: Option<Vec<&str>> = splitted.collect();
-        // for element in splitted {
-        // assert_eq!(element, None);
-        println!("{:?}", splitted);
+    let splitted_equation: Option<Vec<String>> = split_equation(input_1);
 
-        if splitted.len() > 1 {
-            let calculated_result = calculate(
-                splitted[0].parse::<i32>().unwrap(),
-                splitted[1].parse::<i32>().unwrap(),
-                operation,
+    match splitted_equation {
+        Some(vector) => {
+            let calculated_result: i32 = calculate(
+                vector[0].parse::<i32>().unwrap(),
+                vector[1].parse::<i32>().unwrap(),
+                vector[2].to_string(),
             );
-
             println!("{calculated_result}");
-            break;
         }
 
-        // }
-        // println!("{splitted_option}");
-        // }
+        None => println!("No equation found!"),
     }
-
-    // Raise error as now correct equation has been found
-    println!("No correct equation has been found, try again!");
-
-    // let operation = String::from("+");
-
-    // let result = calculate(number_1, number_2, operation);
-    // println!("{}", result);
-    // println!("Number1: {}; Number2: {}", input_1, input_2);
 }
 
-fn calculate(x: i32, y: i32, operation: &str) -> i32 {
-    match operation {
+// If equation can't be splitted, it's not a valid equation!
+fn split_equation(equation: String) -> Option<Vec<String>> {
+    let possible_operations = ["+", "-", "*", "/"];
+
+    for operation in possible_operations {
+        let mut splitted: Vec<String> = equation
+            .trim()
+            .split(operation)
+            .map(|s| s.parse::<String>().unwrap())
+            .collect();
+
+        if splitted.len() > 1 {
+            splitted.push(operation.to_owned());
+            return Some(splitted);
+        };
+    }
+    return None;
+}
+
+// TODO change from integer to decimal datatype equivalent
+fn calculate(x: i32, y: i32, operation: String) -> i32 {
+    match operation.as_str() {
         "+" => x + y,
         "-" => x - y,
         "*" => x * y,
         "/" => x / y,
         _ => 0,
     }
-    // return x + y;
 }
