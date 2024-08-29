@@ -23,11 +23,20 @@ fn main() {
         .parse::<i32>()
         .expect("Not a valid Number 2!");
     // println!("{number_1}");
-    let result = calculate(number_1, number_2);
+    let operation = String::from("+");
+
+    let result = calculate(number_1, number_2, operation);
     println!("{}", result);
     // println!("Number1: {}; Number2: {}", input_1, input_2);
 }
 
-fn calculate(x: i32, y: i32) -> i32 {
-    return x + y;
+fn calculate(x: i32, y: i32, operation: String) -> i32 {
+    match operation.as_str() {
+        "+" => return x + y,
+        "-" => return x - y,
+        "*" => return x * y,
+        "/" => return x / y,
+        _ => return 0,
+    };
+    // return x + y;
 }
