@@ -9,7 +9,8 @@ fn main() {
         .read_line(&mut input_1)
         .expect("Failed to read number!");
 
-    let splitted_equation: Option<Vec<String>> = split_equation(input_1);
+    let splitted_equation: Option<Vec<String>> =
+        split_equation(input_1.split_whitespace().collect());
 
     match splitted_equation {
         Some(vector) => {
